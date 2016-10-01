@@ -38,7 +38,10 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
+        'collective.dexteritytextindexer',
         'plone.api',
+        'plone.app.dexterity',
+        'plone.directives.form',
         'plone.patternslib',
         'Products.GenericSetup>=1.8.2',
         'setuptools',

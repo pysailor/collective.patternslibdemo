@@ -7,15 +7,24 @@
   <includeDependencies package="." />
 
   <include package=".browser" />
+  <include file="vocabularies.zcml" />
 
 
   <genericsetup:registerProfile
       name="default"
-      title="collective.patternslibdemo"
+      title="Patternslib Demo"
       directory="profiles/default"
       description="Installs the collective.patternslibdemo add-on."
       provides="Products.GenericSetup.interfaces.EXTENSION"
       post_handler=".setuphandlers.post_install"
+      />
+
+  <genericsetup:registerProfile
+      name="extra"
+      title="collective.patternslibdemo Extra"
+      directory="profiles/extra"
+      description="Give me the extra!"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <genericsetup:registerProfile
@@ -27,8 +36,19 @@
       post_handler=".setuphandlers.uninstall"
       />
 
+    <adapter name="supplier_title" factory=".indexers.supplier_title_dexterity" />
+    <adapter name="supplier_title" factory=".indexers.supplier_title" />
+
   <utility
       factory=".setuphandlers.HiddenProfiles"
       name="collective.patternslibdemo-hiddenprofiles" />
+
+  <permission
+      id="collective.patternslibdemo.manageAuditReports"
+      title="collective.patternslibdemo: Manage Audit Reports" />
+
+  <permission
+      id="collective.patternslibdemo.manageSuppliers"
+      title="collective.patternslibdemo: Manage Suppliers" />
 
 </configure>

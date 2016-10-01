@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+
+ <index name="plant" meta_type="KeywordIndex">
+  <indexed_attr value="plant"/>
+ </index>
+
+ <index name="audit_type" meta_type="KeywordIndex">
+  <indexed_attr value="audit_type"/>
+ </index>
+
+ <index name="audit_day" meta_type="DateIndex">
+  <indexed_attr value="audit_day"/>
+ </index>
+
+ <index name="audit_result" meta_type="KeywordIndex">
+  <indexed_attr value="audit_result"/>
+ </index>
+
+ <index name="supplier_location" meta_type="KeywordIndex">
+  <indexed_attr value="supplier_location"/>
+ </index>
+
+ <index name="wow_state" meta_type="KeywordIndex">
+  <indexed_attr value="wow_state"/>
+ </index>
+
+
+ <index name="part_number" meta_type="ZCTextIndex">
+  <indexed_attr value="part_number"/>
+  <extra name="index_type" value="Okapi BM25 Rank"/>
+  <extra name="lexicon_id" value="plone_lexicon"/>
+ </index>
+
+ <column value="plant"/>
+ <column value="audit_type"/>
+ <column value="audit_day"/>
+ <column value="audit_result"/>
+ <column value="supplier_location"/>
+ <column value="wow_state"/>
+ <column value="part_number"/>
+ <column value="supplier_title" />
+
+</object>

@@ -17,4 +17,68 @@
       directory="static"
       />
 
+  <!-- used for the presentation -->
+  <browser:page
+     name="slide"
+     for="*"
+     layer="collective.patternslibdemo.interfaces.ICollectivePatternslibdemoLayer"
+     class=".slide.SlideView"
+     permission="zope2.View"
+     />
+
+
+  <browser:page
+     name="audit-search"
+     for="*"
+     layer="collective.patternslibdemo.interfaces.ICollectivePatternslibdemoLayer"
+     class=".audits.AuditSearchView"
+     template="templates/audit_search.pt"
+     permission="zope2.View"
+     />
+
+  <browser:page
+     name="audit-search-filter"
+     for="*"
+     layer="collective.patternslibdemo.interfaces.ICollectivePatternslibdemoLayer"
+     class=".audits.AuditSearchView"
+     template="templates/audit_search_filter.pt"
+     permission="zope2.View"
+     />
+
+  <browser:page
+     name="suppliers-listing"
+     for="*"
+     layer="collective.patternslibdemo.interfaces.ICollectivePatternslibdemoLayer"
+     class=".suppliers.SuppliersView"
+     template="templates/suppliers_listing.pt"
+     permission="zope2.View"
+     />
+
+  <browser:page
+     name="suppliers-listing-injection"
+     for="*"
+     layer="collective.patternslibdemo.interfaces.ICollectivePatternslibdemoLayer"
+     class=".suppliers.SuppliersView"
+     template="templates/suppliers_listing_injection.pt"
+     permission="zope2.View"
+     />
+
+  <browser:page
+     name="suppliers-listing-styled"
+     for="*"
+     layer="collective.patternslibdemo.interfaces.ICollectivePatternslibdemoLayer"
+     class=".suppliers.SuppliersView"
+     template="templates/suppliers_listing_styled.pt"
+     permission="zope2.View"
+     />
+
+
+   <browser:page
+      name="edit"
+      for="collective.patternslibdemo.content.auditreport.IAuditReport"
+      layer="collective.patternslibdemo.interfaces.ICollectivePatternslibdemoLayerExtra"
+      class=".audits.AuditReportEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

@@ -1,0 +1,99 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.patternslibdemo">
+
+  <metal:styles fill-slot="style_slot">
+    <link rel="stylesheet" type="text/css" href="++resource++collective.patternslibdemo/modal.css" />
+  </metal:styles>
+
+  <body class="view-secure">
+    <metal:content fill-slot="main">
+
+    <div id="suppliers-container" class="container" tal:define="ploneview here/@@plone">
+        <h1>Suppliers</h1>
+
+        <form class="pat-inject pat-autosubmit" action="${context/absolute_url}/${view/view_name}#suppliers"  method="POST">
+            <label>
+                <select name="sort">
+                    <tal:r repeat="o view/sort_options">
+                        <option tal:attributes="value o/value; selected python:request.get('sort')==o['value'] and 'selected' or None" tal:content="o/content" i18n:translate="">Option</option>
+                    </tal:r>
+                 </select>
+            </label>
+
+             <input type="search" placeholder="Search suppliers" focus="focus" name="Title" i18n:attributes="placeholder" value="${request/Title | nothing}">
+              <a href="#modal-formtag" class="pat-modal" data-pat-modal="class: large">[ Using injection ]</a>
+              <a href="#modal-results" class="pat-modal" data-pat-modal="class: large">[ The results area ]</a>
+         </form>
+
+        <div id="suppliers">
+          <tal:r repeat="supplier view/suppliers">
+            <div>
+              <a href="${supplier/url}" class="link">
+                <h3>${python:ploneview.cropText(supplier['title'], 80)}</h3>
+                <p class="description">
+                    ${supplier/description}
+                </p>
+              </a>
+            </div>
+          </tal:r>
+        </div>
+
+      </div>
+
+    <!-- modal content -->
+    <div id="modal-formtag" hidden="hidden">
+      <h3>Don't reload the whole page, use injection</h3>
+      <p>
+        We use <strong class="pattern">pat-inject</strong> to re-insert the search results into an element with id "suppliers".<br />
+
+
+<code>
+&lt;form<br/>
+  <span class="indent">
+  <strong>class</strong>="<strong>pat-inject</strong> pat-autosubmit"<br/>
+  <strong>action=<em>"${view/view_name}#suppliers"</em></strong><br/>
+  method="POST"&gt;
+  </span>
+</code>
+      </p>
+      <p><a target="_new" href="http://patternslib.com/inject/">Documentation</a></p>
+    </div>
+
+
+    <div id="modal-results" hidden="hidden">
+      <h3>
+        The results area
+      </h3>
+      <p>
+        All results are displayed in a &lt;div> with id "suppliers".<br/>
+<code>
+&lt;div <strong>id="suppliers"</strong>&gt;<br/>
+  <span class="indent">
+  &lt;div tal:repeat="supplier view/suppliers"&gt;<br/>
+    <span class="indent">Display title and description...</span><br/>
+  &lt;/div&gt;
+  </span><br />
+&lt;/div&gt;
+</code>
+      </p>
+<p>Its contents will get replaced by the injection. Reminder:
+<code>
+&lt;form<br/>
+  <span class="indent">
+  class="<strong>pat-inject</strong> pat-autosubmit"<br/>
+  <strong>action=<em>"${view/view_name}#suppliers"</em></strong><br/>
+  method="POST"&gt;
+  </span>
+</code>
+</p>
+<p><a target="_new" href="http://patternslib.com/inject/">Documentation</a></p>
+    </div>
+
+    </metal:content>
+  </body>
+</html>

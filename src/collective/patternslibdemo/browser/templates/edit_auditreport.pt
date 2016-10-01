@@ -1,0 +1,135 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone.app.dexterity">
+<metal:styles fill-slot="style_slot">
+  <link rel="stylesheet" type="text/css" href="++resource++collective.patternslibdemo/modal.css" />
+</metal:styles>
+
+<body>
+<metal:main fill-slot="main">
+  <metal:form use-macro="context/@@ploneform-macros/form" >
+    <metal:fields fill-slot="fields">
+      <a href="#modal-edit-form" class="pat-modal right" data-pat-modal="class: large">[ Code ]</a>
+      <input type="hidden"
+          name="fieldset"
+          tal:define="current_fieldset request/fieldset | python:None"
+          tal:condition="python:has_groups and enable_form_tabbing and current_fieldset is not None"
+          tal:attributes="value current_fieldset"
+          />
+
+      <fieldset id="fieldset-default" tal:omit-tag="not:show_default_label"
+        tal:define="show_default_label show_default_label|nothing;
+                      has_groups has_groups|nothing">
+
+        <legend tal:condition="show_default_label"
+                      tal:attributes="id string:fieldsetlegend-default"
+                      tal:content="default_fieldset_label">Form name</legend>
+
+        <metal:define define-macro="widget_rendering">
+          <tal:widgets repeat="widget view/widgets/values">
+            <tal:block tal:condition="python:widget.__name__ not in ['audit_result']">
+              <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
+            </tal:block>
+
+            <div tal:condition="python:widget.__name__ == 'audit_result' and widget.mode == 'input'"
+              tal:define="fieldname_class string:kssattr-fieldname-${widget/name};
+              existing_value here/audit_result;"
+               data-pat-inlinevalidation='{"type":"z3c.form"}'
+               tal:attributes="class string:field pat-inlinevalidation ${fieldname_class};
+                               data-fieldname widget/name;
+                               id string:formfield-${widget/id};">
+                <label for="" class="horizontal"
+                    tal:attributes="for widget/id">
+                    <span i18n:translate="" tal:replace="widget/label">label</span>
+                    <span class="required horizontal" title="Required">&nbsp;</span>
+                    <span class="formHelp"
+                        tal:define="description widget/field/description"
+                        i18n:translate=""
+                        tal:content="structure description"
+                        tal:condition="description"
+                        >field description
+                    </span>
+                </label>
+                <a href="#modal-depends" class="pat-modal right" data-pat-modal="class: large">[ Code ]</a>
+
+                <!-- here we need to use pat-depends to show the different selections,
+                depending on the user's choice for audit type -->
+                <select id="form-widgets-audit_results_int_inv" disabled="disabled" name="form.widgets.audit_result:list" class="select-widget required choice-field pat-depends" size="1" data-pat-depends="condition:form-widgets-audit_type=internal or form-widgets-audit_type=investigative; action:both">
+                  <option tal:repeat="value view/audit_results_int_inv" id="form-widgets-audit_result-${repeat/value/index}" value="${value}" tal:attributes="selected python:value==existing_value and 'selected' or ''">${python:view.audit_results_int_inv[value]}</option>
+                </select>
+
+                <select id="form-widgets-audit_results_fin" disabled="disabled" name="form.widgets.audit_result:list" class="select-widget required choice-field pat-depends" size="1" data-pat-depends="condition:form-widgets-audit_type=financial; action:both">
+                  <option tal:repeat="value view/audit_results_fin" id="form-widgets-audit_result-${repeat/value/index}" value="${value}" tal:attributes="selected python:value==existing_value and 'selected' or ''">${python:view.audit_results_fin[value]}</option>
+                </select>
+
+                <select id="form-widgets-audit_results_ops" disabled="disabled" name="form.widgets.audit_result:list" class="select-widget required choice-field pat-depends" size="1" data-pat-depends="condition:form-widgets-audit_type=operational; action:both">
+                  <option tal:repeat="value view/audit_results_ops" id="form-widgets-audit_result-${repeat/value/index}" value="${value}" tal:attributes="selected python:value==existing_value and 'selected' or ''">${python:view.audit_results_ops[value]}</option>
+                </select>
+
+            </div>
+          </tal:widgets>
+        </fieldset>
+    </metal:fields>
+  </metal:form>
+
+
+  <!-- modal content -->
+  <div id="modal-edit-form" hidden="hidden">
+    <h3>Custom edit form</h3>
+    <p>
+      Markup copied from <em>plone.app.z3cform.templates</em>.<br/>
+      Special handling for field "Audit result"
+<code>
+&lt;tal:widgets repeat="widget view/widgets/values"><br/>
+  <span class="indent">
+  &lt;tal:block tal:condition="python:widget.__name__ not in ['audit_result']"><br/>
+    <span class="indent">
+    &lt;tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
+    </span><br/>
+  &lt;/tal:block><br/>
+  &lt;div <strong>tal:condition="python:widget.__name__ == 'audit_result'"</strong><br/>
+    <span class="indent">
+    [ ... markup for displaying the field ... ]
+    </span><br/>
+  &lt;/div>
+  </span><br/>
+&lt;/tal:widgets>
+</code>
+  </div>
+
+  <div id="modal-depends" hidden="hidden">
+    <h3>Depending on previous input</h3>
+    <p>
+      With <strong class="pattern">pat-depends</strong> we show or hide select fields based on the user's choice for "Audit type". The example below shows the case for audit type "Operational".
+<code>
+&lt;select<br/>
+  <span class="indent">
+  <strong>class</strong>="<strong>pat-depends</strong>"<br/>
+  disabled="disabled"<br/>
+  name="form.widgets.audit_result:list"<br/>
+  <strong>data-pat-depends</strong>="<br/>
+    <span class="indent">
+    <strong>condition:form-widgets-audit_type=operational</strong><br/>
+    action:both"
+    </span><br/>
+  ><br/>
+    <span class="indent">
+    &lt;option value="pass" selected="selected">Green&lt;/option><br/>
+    &lt;option value="conditional">Yellow&lt;/option><br/>
+    &lt;option value="fail">Red&lt;/option>
+    </span><br/>
+  </span>
+&lt;/select>
+</code>
+    </p>
+    <p>The code for the other 2 cases is equivalent.<br/>
+    <p><a target="_new" href="http://patternslib.com/depends/">Documentation</a></p>
+  </div>
+</metal:main>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.patternslibdemo">
+
+<!--   <metal:styles fill-slot="style_slot">
+    <link rel="stylesheet" type="text/css" href="++resource++collective.patternslibdemo/localstyles.css" />
+    <link rel="stylesheet" type="text/css" href="++resource++collective.patternslibdemo/modal.css" />
+  </metal:styles> -->
+
+<body class="view-secure">
+    <metal:content fill-slot="main">
+
+      <div tal:define="doc nocall:view/doc; slide_no view/slide_no">
+          <div tal:condition="not:doc" class="error">
+            No slide with number ${slide_no} found, check your settings!
+          </div>
+          <tal:slide condition="doc">
+            <h1 class="documentFirstHeading">${doc/Title}</h1>
+            <p class="documentDescription" tal:condition="doc/Description">
+              ${doc/Description}
+            </p>
+            <article class="rich">
+              <form action="${here/absolute_url}" method="POST">
+                <span tal:replace="structure doc/text/output" />
+                <span tal:replace="structure context/@@authenticator/authenticator"/>
+                <button type="submit" class="pat-button" value="Next" name="form.button.NextSlide">Next</button>
+              </form>
+            </article>
+
+
+
+          </tal:slide>
+
+
+
+      </div>
+    </metal:content>
+</body>
+</html>

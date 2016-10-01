@@ -17,6 +17,8 @@ parts/
 src/*
 test.plone_addon/
 var/
+# mac crap
+._*
 # files
 .installed.cfg
 .mr.developer.cfg

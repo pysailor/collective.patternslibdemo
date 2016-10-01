@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.patternslibdemo">
+
+  <metal:styles fill-slot="style_slot">
+    <link rel="stylesheet" type="text/css" href="++resource++collective.patternslibdemo/modal.css" />
+  </metal:styles>
+
+  <body class="view-secure">
+    <metal:content fill-slot="main">
+
+    <div id="suppliers-container" class="container" tal:define="ploneview here/@@plone">
+        <h1>Suppliers</h1>
+
+        <form class="canvas-toolbar pat-autosubmit" action="${context/absolute_url}/${view/view_name}" method="POST">
+            <label>
+                <select name="sort">
+                    <tal:r repeat="o view/sort_options">
+                        <option tal:attributes="value o/value; selected python:request.get('sort')==o['value'] and 'selected' or None" tal:content="o/content" i18n:translate="">Option</option>
+                    </tal:r>
+                 </select>
+            </label>
+
+             <input type="search" placeholder="Search suppliers" focus="focus" name="Title" i18n:attributes="placeholder" value="${request/Title | nothing}">
+              <a href="#modal-no-injection" class="pat-modal" data-pat-modal="class: large">[ Submit on change ]</a>
+         </form>
+
+        <div id="suppliers">
+          <tal:r repeat="supplier view/suppliers">
+            <div>
+              <a href="${supplier/url}" class="link">
+                <h3>${python:ploneview.cropText(supplier['title'], 80)}</h3>
+                <p class="description">
+                    ${supplier/description}
+                </p>
+              </a>
+            </div>
+          </tal:r>
+        </div>
+
+      </div>
+
+    <!-- modal content -->
+    <div id="modal-no-injection" hidden="hidden">
+      <h3>Submitting the form on change</h3>
+      <p>
+        With <strong class="pattern">pat-autosubmit</strong> the form is submitted on every change.
+
+<code>&lt;form<br/>
+  <span class="indent">
+  <strong>class="pat-autosubmit"</strong><br/>
+  action="${view/view_name}"<br/>
+  method="POST"&gt;<br/>
+&nbsp;<br/>
+  &lt;input type="search"<br/>
+    <span class="indent">
+    placeholder="Search suppliers"<br>
+    name="Title"&gt;
+    </span><br/>
+  </span>
+&lt;/form&gt;</code>
+      </p>
+      <p><a target="_new" href="http://patternslib.com/auto-submit/">Documentation</a></p>
+    </div>
+
+
+
+    </metal:content>
+  </body>
+</html>
