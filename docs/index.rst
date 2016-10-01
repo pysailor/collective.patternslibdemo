@@ -1,0 +1,5 @@
+====================
+collective.patternslibdemo
+====================
+
+User documentation
